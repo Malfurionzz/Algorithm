@@ -9,22 +9,30 @@ import java.util.Random;
  */
 public class quickSort {
     public static void main(String[] args) {
-        int[] arr = new int[]{5, 3, 5, 2, 5};
+        int[] arr = new int[]{4, 3, 7, 2, 5};
         System.out.println(Arrays.toString(arr));
-        quickSort(arr);
+        tailRecursiveQuickSort(arr);
         System.out.println(Arrays.toString(arr));
-    }
-    public static void tailRecursiveQuickSort(int[] a){
-        innerTailRecursiveQuickSort(a,0,a.length-1);
     }
 
-    public static void innerTailRecursiveQuickSort(int[] a,int p,int q){
-        int r=partition(a,p,q);
-        innerTailRecursiveQuickSort(a,p,r-1);
-        p=r+1;
+    public static void tailRecursiveQuickSort(int[] a) {
+        innerTailRecursiveQuickSort(a, 0, a.length - 1);
     }
 
-    public static void quickSort(int[] a) {
+    public static void innerTailRecursiveQuickSort(int[] a, int p, int q) {
+        while (p < q) {
+            int r = partition(a, p, q);
+            if (r - p < q - r) {
+                innerTailRecursiveQuickSort(a, p, r - 1);
+                p = r + 1;
+            } else {
+                innerTailRecursiveQuickSort(a, r + 1, q);
+                q = r - 1;
+            }
+        }
+    }
+
+    public static void QuickSort(int[] a) {
         innerQuickSort(a, 0, a.length - 1);
     }
 
@@ -36,12 +44,16 @@ public class quickSort {
             innerQuickSort(a, r + 1, q);
         }
     }
+
     public static int RandomPartition(int[] a, int p, int q) {
-        Random rand=new Random();
-        int index=rand.nextInt(q-p+1)+p;
-        int temp= a[p]; a[p]=a[index]; a[index]=temp;
-        return partition(a,p,q);
+        Random rand = new Random();
+        int index = rand.nextInt(q - p + 1) + p;
+        int temp = a[p];
+        a[p] = a[index];
+        a[index] = temp;
+        return partition(a, p, q);
     }
+
     public static int partition(int[] a, int p, int q) {
         int pivot = a[p];
         while (p < q) {
