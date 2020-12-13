@@ -1,5 +1,5 @@
 ## basic quickSort
-```
+```java
 public class quickSort {
 public static void innerQuickSort(int[] a, int p, int q) {
         if (p < q) {
