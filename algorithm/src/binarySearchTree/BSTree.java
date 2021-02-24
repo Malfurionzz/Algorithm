@@ -237,6 +237,19 @@ public class BSTree<T extends Comparable<T>> {
             latter.parent=former.parent;
     }
     public void delete(BSTnode<T> x){
+        if (x.left==null)
+            transplant(x,x.right);
+        else if (x.right==null)
+            transplant(x,x.left);
+        else {
+            BSTnode<T> next=successor(x);
+            if (x.right!=next){
+                transplant(next,next.right);
+                next.right=x.right;
+                next.right.parent=next;
+            }
+            transplant(x,next);
+        }
     }
 
     private void print(BSTnode<T> tree, T key, int direction) {
