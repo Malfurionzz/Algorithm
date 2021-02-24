@@ -1,6 +1,7 @@
 package binarySearchTree;
 
 
+import java.time.Year;
 import java.time.temporal.Temporal;
 import java.util.Stack;
 import java.util.zip.ZipEntry;
@@ -147,6 +148,56 @@ public class BSTree<T extends Comparable<T>> {
         return search(root, key);
     }
 
+    public BSTnode<T> min(BSTnode tree){
+        if (tree==null){
+            return null;
+        }
+        if (tree.left!=null)
+            return min(tree.left);
+        else return tree;
+    }
+    public BSTnode<T> min(){
+       return min(root);
+    }
+
+    public BSTnode<T> max(BSTnode tree){
+        if (tree==null){
+            return null;
+        }
+        if (tree.right!=null)
+            return max(tree.right);
+        else return tree;
+    }
+    public BSTnode<T> max(){
+        return max(root);
+    }
+    public BSTnode<T> successor(BSTnode x){
+        if (x.right !=null)
+            return min(x.right);
+        if (x.parent.left==x){
+            return x.parent;
+        }
+        BSTnode parentOfx=x.parent;
+        while (parentOfx.right==x){
+            x=parentOfx;
+            parentOfx=x.parent;
+        }
+        return  parentOfx;
+    }
+
+    public BSTnode<T> predecessor(BSTnode x){
+       if (x.left!=null)
+            return max(x.left);
+       if (x.parent.right==x){
+           return x.parent;
+       }
+       BSTnode parentOfx=x.parent;
+       while (parentOfx.left==x){
+           x=parentOfx;
+           parentOfx=x.parent;
+       }
+       return x;
+    }
     private void insert(BSTree<T> tree, BSTnode<T> node) {
         BSTnode<T> y = null;
         BSTnode<T> x = tree.root;
@@ -175,6 +226,19 @@ public class BSTree<T extends Comparable<T>> {
         }
     }
 
+    private void transplant(BSTnode<T> former,BSTnode<T> latter){
+        if (root==former)
+            root=latter;
+        else if (former.parent.left==former)
+            former.parent.left=latter;
+        else
+            former.parent.right=latter;
+        if (latter!=null)
+            latter.parent=former.parent;
+    }
+    public void delete(BSTnode<T> x){
+    }
+
     private void print(BSTnode<T> tree, T key, int direction) {
 
         if (tree != null) {
@@ -195,7 +259,7 @@ public class BSTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        final int[] arr = new int[]{1, 5, 4, 3, 2, 6};
+        final int[] arr = new int[]{15,6,3,2,4,7,13,9,18,17,20};
         int i, ilen;
         BSTree<Integer> tree = new BSTree<>();
 
@@ -205,10 +269,11 @@ public class BSTree<T extends Comparable<T>> {
             System.out.print(arr[i] + " ");
             tree.insert(arr[i]);
         }
-        System.out.println("== 树的详细信息: ");
+
         tree.print();
-        tree.postOrder();
-        System.out.println(tree.search(5).key);
+        System.out.println(tree.successor(tree.search(13)).key);
+//        tree.postOrder();
+//        System.out.println(tree.search(5).key);
     }
 }
 
