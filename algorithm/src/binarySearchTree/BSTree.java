@@ -284,7 +284,8 @@ public class BSTree<T extends Comparable<T>> {
         }
 
         tree.print();
-        System.out.println(tree.successor(tree.search(13)).key);
+        tree.delete(tree.search(18));
+        tree.print();
 //        tree.postOrder();
 //        System.out.println(tree.search(5).key);
     }
