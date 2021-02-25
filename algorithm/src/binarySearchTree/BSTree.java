@@ -33,7 +33,8 @@ public class BSTree<T extends Comparable<T>> {
 
     private void preOrder_nr(BSTnode<T> tree) {
         Stack<BSTnode> stack = new Stack<>();
-        stack.push(tree);
+        if(tree!=null)
+            stack.push(tree);
         while (!stack.isEmpty()) {
             BSTnode tmp = stack.pop();
             System.out.println(tmp.key + " ");
