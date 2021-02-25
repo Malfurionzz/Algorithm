@@ -1,10 +1,7 @@
 package binarySearchTree;
 
 
-import java.time.Year;
-import java.time.temporal.Temporal;
 import java.util.Stack;
-import java.util.zip.ZipEntry;
 
 public class BSTree<T extends Comparable<T>> {
     private BSTnode<T> root;
@@ -33,7 +30,7 @@ public class BSTree<T extends Comparable<T>> {
 
     private void preOrder_nr(BSTnode<T> tree) {
         Stack<BSTnode> stack = new Stack<>();
-        if(tree!=null)
+        if (tree != null)
             stack.push(tree);
         while (!stack.isEmpty()) {
             BSTnode tmp = stack.pop();
@@ -59,7 +56,6 @@ public class BSTree<T extends Comparable<T>> {
     }
 
     /*
-
     1)Push the current node to S and set current = current->left until current is NULL
     2) If current is NULL and stack is not empty then
          a) Pop the top item from stack.
@@ -111,23 +107,27 @@ public class BSTree<T extends Comparable<T>> {
     private void postOrder_nr(BSTnode<T> tree) {
         Stack<BSTnode> stack = new Stack<>();
         BSTnode tmp = tree;
-        do {
-            while (tmp != null) {
-                if (tmp.right != null)
-                    stack.push(tmp.right);
-                stack.push(tmp);
-                tmp = tmp.left;
-            }
-            tmp = stack.pop();
-            if (tmp.right != null && !stack.isEmpty() && stack.peek().equals(tmp.right)) {
-                stack.pop();
-                stack.push(tmp);
-                tmp = tmp.right;
-            } else {
-                System.out.println(tmp.key + " ");
-                tmp = null;
-            }
-        } while (!stack.isEmpty());
+        if (tree != null) {
+            do {
+                while (tmp != null) {
+                    if (tmp.right != null)
+                        stack.push(tmp.right);
+                    stack.push(tmp);
+                    tmp = tmp.left;
+                }
+
+                tmp = stack.pop();
+                if (tmp.right != null && !stack.isEmpty() && stack.peek().equals(tmp.right)) {
+                    stack.pop();
+                    stack.push(tmp);
+                    tmp = tmp.right;
+                } else {
+                    System.out.println(tmp.key + " ");
+                    tmp = null;
+                }
+            } while (!stack.isEmpty());
+        }
+
     }
 
     public void postOrder() {
@@ -149,56 +149,60 @@ public class BSTree<T extends Comparable<T>> {
         return search(root, key);
     }
 
-    public BSTnode<T> min(BSTnode tree){
-        if (tree==null){
+    public BSTnode<T> min(BSTnode tree) {
+        if (tree == null) {
             return null;
         }
-        if (tree.left!=null)
+        if (tree.left != null)
             return min(tree.left);
         else return tree;
     }
-    public BSTnode<T> min(){
-       return min(root);
+
+    public BSTnode<T> min() {
+        return min(root);
     }
 
-    public BSTnode<T> max(BSTnode tree){
-        if (tree==null){
+    public BSTnode<T> max(BSTnode tree) {
+        if (tree == null) {
             return null;
         }
-        if (tree.right!=null)
+        if (tree.right != null)
             return max(tree.right);
         else return tree;
     }
-    public BSTnode<T> max(){
+
+    public BSTnode<T> max() {
         return max(root);
     }
-    public BSTnode<T> successor(BSTnode x){
-        if (x.right !=null)
+
+    public BSTnode<T> successor(BSTnode x) {
+        if (x.right != null)
             return min(x.right);
-        if (x.parent.left==x){
+        if (x.parent.left == x) {
             return x.parent;
         }
-        BSTnode parentOfx=x.parent;
-        while (parentOfx.right==x){
-            x=parentOfx;
-            parentOfx=x.parent;
+        BSTnode parentOfx = x.parent;
+        while (parentOfx.right == x) {
+            x = parentOfx;
+            parentOfx = x.parent;
         }
-        return  parentOfx;
+        return parentOfx;
     }
 
-    public BSTnode<T> predecessor(BSTnode x){
-       if (x.left!=null)
+    public BSTnode<T> predecessor(BSTnode x) {
+        if (x.left != null)
             return max(x.left);
-       if (x.parent.right==x){
-           return x.parent;
-       }
-       BSTnode parentOfx=x.parent;
-       while (parentOfx.left==x){
-           x=parentOfx;
-           parentOfx=x.parent;
-       }
-       return x;
+        if (x.parent.right == x) {
+            return x.parent;
+        }
+        BSTnode parentOfx = x.parent;
+        while (parentOfx.left == x) {
+            x = parentOfx;
+            parentOfx = x.parent;
+        }
+        return x;
     }
+
     private void insert(BSTree<T> tree, BSTnode<T> node) {
         BSTnode<T> y = null;
         BSTnode<T> x = tree.root;
@@ -227,29 +231,30 @@ public class BSTree<T extends Comparable<T>> {
         }
     }
 
-    private void transplant(BSTnode<T> former,BSTnode<T> latter){
-        if (root==former)
-            root=latter;
-        else if (former.parent.left==former)
-            former.parent.left=latter;
+    private void transplant(BSTnode<T> former, BSTnode<T> latter) {
+        if (root == former)
+            root = latter;
+        else if (former.parent.left == former)
+            former.parent.left = latter;
         else
-            former.parent.right=latter;
-        if (latter!=null)
-            latter.parent=former.parent;
+            former.parent.right = latter;
+        if (latter != null)
+            latter.parent = former.parent;
     }
-    public void delete(BSTnode<T> x){
-        if (x.left==null)
-            transplant(x,x.right);
-        else if (x.right==null)
-            transplant(x,x.left);
+
+    public void delete(BSTnode<T> x) {
+        if (x.left == null)
+            transplant(x, x.right);
+        else if (x.right == null)
+            transplant(x, x.left);
         else {
-            BSTnode<T> next=successor(x);
-            if (x.right!=next){
-                transplant(next,next.right);
-                next.right=x.right;
-                next.right.parent=next;
+            BSTnode<T> next = successor(x);
+            if (x.right != next) {
+                transplant(next, next.right);
+                next.right = x.right;
+                next.right.parent = next;
             }
-            transplant(x,next);
+            transplant(x, next);
         }
     }
 
@@ -273,7 +278,7 @@ public class BSTree<T extends Comparable<T>> {
     }
 
     public static void main(String[] args) {
-        final int[] arr = new int[]{15,6,3,2,4,7,13,9,18,17,20};
+        final int[] arr = new int[]{};
         int i, ilen;
         BSTree<Integer> tree = new BSTree<>();
 
@@ -284,10 +289,10 @@ public class BSTree<T extends Comparable<T>> {
             tree.insert(arr[i]);
         }
 
+//        tree.print();
+//        tree.delete(tree.search(18));
         tree.print();
-        tree.delete(tree.search(18));
-        tree.print();
-//        tree.postOrder();
+        tree.postOrder();
 //        System.out.println(tree.search(5).key);
     }
 }
