@@ -34,6 +34,16 @@ public class RBTree<T extends Comparable<T>> {
             this.left = left;
             this.right = right;
         }
+        private void  setRed(){
+            color=true;
+        }
+        private void setBlack(){
+            color=false;
+        }
+        public boolean isRed(){
+            return color;
+        }
+
     }
     private void leftRotation(RBTnode x){
         RBTnode y=x.right;
@@ -64,8 +74,37 @@ public class RBTree<T extends Comparable<T>> {
         x.right=y;
         y.parent=x;
     }
-    private void insertFixUp(){
-
+    private void insertFixUp(RBTnode z){
+        while (z.isRed()){
+            RBTnode y;
+            if (z.parent==z.parent.parent.left){
+                y=z.parent.parent.right;
+                if (y.isRed()){
+                    z.parent.setBlack();
+                    y.setBlack();
+                    z=y.parent;
+                }else if (z==z.parent.right){
+                    z=z.parent;
+                    leftRotation(z);
+                }
+                z.parent.setBlack();
+                z.parent.parent.setRed();
+                rightRotation(z.parent.parent);
+            }else {
+                y=z.parent.parent.left;
+                if (y.isRed()){
+                    z.parent.setBlack();
+                    y.setBlack();
+                    z=y.parent;
+                }else if (z==z.parent.left){
+                    z=z.parent;
+                    rightRotation(z);
+                }
+                z.parent.setBlack();
+                z.parent.parent.setRed();
+                leftRotation(z.parent.parent);
+            }
+        }
     }
     private void insert(RBTnode x){
         RBTnode parentOfTmp=Nul;
