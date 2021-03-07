@@ -10,6 +10,7 @@ package RBTree;/**
  * @version 1.0
  */
 
+import binarySearchTree.BSTree;
 import com.sun.org.apache.regexp.internal.RE;
 
 import java.util.Stack;
@@ -20,6 +21,7 @@ public class RBTree<T extends Comparable<T>> {
 
     public RBTree(){
         Nul=new RBTnode<T>(null,false,null,null,null);
+        root=Nul;
     }
     public class RBTnode<T extends Comparable<T>> {
         T key;
@@ -75,36 +77,43 @@ public class RBTree<T extends Comparable<T>> {
         y.parent=x;
     }
     private void insertFixUp(RBTnode z){
-        while (z.isRed()){
-            RBTnode y;
-            if (z.parent==z.parent.parent.left){
+        RBTnode y;
+        while (z.parent.isRed()){
+            if(z.parent==z.parent.parent.left) {
                 y=z.parent.parent.right;
-                if (y.isRed()){
-                    z.parent.setBlack();
-                    y.setBlack();
-                    z=y.parent;
-                }else if (z==z.parent.right){
-                    z=z.parent;
-                    leftRotation(z);
-                }
-                z.parent.setBlack();
-                z.parent.parent.setRed();
-                rightRotation(z.parent.parent);
+               if(y.isRed()){
+                   z.parent.setBlack();
+                   y.setBlack();
+                   z=y.parent;
+                   z.setRed();
+               }else{
+                   if(z==z.parent.right){
+                        z=z.parent;
+                        leftRotation(z);
+                   }
+                   z.parent.setBlack();
+                   z.parent.parent.setRed();
+                   rightRotation(z.parent.parent);
+               }
             }else {
                 y=z.parent.parent.left;
-                if (y.isRed()){
+                if(y.isRed()){
                     z.parent.setBlack();
                     y.setBlack();
                     z=y.parent;
-                }else if (z==z.parent.left){
-                    z=z.parent;
-                    rightRotation(z);
+                    z.setRed();
+                }else{
+                    if(z==z.parent.left){
+                        z=z.parent;
+                        rightRotation(z);
+                    }
+                    z.parent.setBlack();
+                    z.parent.parent.setRed();
+                    leftRotation(z.parent.parent);
                 }
-                z.parent.setBlack();
-                z.parent.parent.setRed();
-                leftRotation(z.parent.parent);
             }
         }
+        root.setBlack();
     }
     private void insert(RBTnode x){
         RBTnode parentOfTmp=Nul;
@@ -125,12 +134,37 @@ public class RBTree<T extends Comparable<T>> {
         }else {
             parentOfTmp.right=x;
         }
-//        insertFixUp(x);
+        insertFixUp(x);
     }
     public void insert(T key){
         RBTnode<T> x=new RBTnode<T>(key,true,Nul,Nul,Nul);
+        insert(x);
+    }
+    private void print(RBTnode<T> tree, T key, int direction) {
 
+        if (tree != null) {
+
+            if (direction == 0)    // tree是根节点
+                System.out.printf("%2d is root\n", tree.key);
+            else                // tree是分支节点
+                System.out.printf("%2d is %2d's %6s child\n", tree.key, key, direction == 1 ? "right" : "left");
+
+            print(tree.left, tree.key, -1);
+            print(tree.right, tree.key, 1);
+        }
     }
 
+    public void print() {
+        if (root != null)
+            print(root, root.key, 0);
+    }
+    public static void main(String[] args) {
+        int[] a={9,8,7,6,5,4,3,2,1};
+        RBTree tree=new RBTree();
+        for (int i:a){
+            tree.insert(i);
+        }
+        tree.print();
+    }
 }
 
