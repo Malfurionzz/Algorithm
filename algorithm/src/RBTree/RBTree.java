@@ -1,24 +1,17 @@
-package RBTree;/**
+package RBTree;
+
+import binarySearchTree.BSTree;
+
+/**
  * @auther zsy
  * @date 2021/2/27-23:11
  */
 
-/**
- * @description: TODO
- * @author zsy
- * @date 2021/2/27 23:11
- * @version 1.0
- */
-
-import binarySearchTree.BSTree;
-import com.sun.org.apache.regexp.internal.RE;
-
-import java.util.Stack;
-
 public class RBTree<T extends Comparable<T>> {
     private RBTnode<T> root;
     private RBTnode<T> Nul;
-
+    public static boolean BLACK=false;
+    public static boolean RED=true;
     public RBTree(){
         Nul=new RBTnode<T>(null,false,null,null,null);
         root=Nul;
@@ -29,6 +22,7 @@ public class RBTree<T extends Comparable<T>> {
         RBTnode<T> right;
         RBTnode<T> left;
         RBTnode<T> parent;
+
         public RBTnode(T key,boolean color, RBTnode parent,RBTnode left,RBTnode right){
             this.key = key;
             this.color=color;
@@ -36,16 +30,25 @@ public class RBTree<T extends Comparable<T>> {
             this.left = left;
             this.right = right;
         }
+
         private void  setRed(){
-            color=true;
+            color=RED;
         }
         private void setBlack(){
-            color=false;
+            color=BLACK;
         }
-        public boolean isRed(){
-            return color;
+    }
+    public RBTnode<T> min(RBTnode tree) {
+        if (tree == null) {
+            return null;
         }
+        if (tree.left != null)
+            return min(tree.left);
+        else return tree;
+    }
 
+    public RBTnode<T> min() {
+        return min(root);
     }
     private void leftRotation(RBTnode x){
         RBTnode y=x.right;
@@ -78,10 +81,10 @@ public class RBTree<T extends Comparable<T>> {
     }
     private void insertFixUp(RBTnode z){
         RBTnode y;
-        while (z.parent.isRed()){
+        while (z.parent.color==RED){
             if(z.parent==z.parent.parent.left) {
                 y=z.parent.parent.right;
-               if(y.isRed()){
+               if(y.color==RED){
                    z.parent.setBlack();
                    y.setBlack();
                    z=y.parent;
@@ -97,7 +100,7 @@ public class RBTree<T extends Comparable<T>> {
                }
             }else {
                 y=z.parent.parent.left;
-                if(y.isRed()){
+                if(y.color==RED){
                     z.parent.setBlack();
                     y.setBlack();
                     z=y.parent;
@@ -140,6 +143,47 @@ public class RBTree<T extends Comparable<T>> {
         RBTnode<T> x=new RBTnode<T>(key,true,Nul,Nul,Nul);
         insert(x);
     }
+
+    private void transplant(RBTnode<T> former, RBTnode<T> latter) {
+        if (former.parent==Nul)
+            root=latter;
+        else if (former==former.parent.left)
+            former.parent.left=latter;
+        else
+            former.parent.right=latter;
+        latter.parent=former.parent;
+    }
+    public void delete(RBTnode<T> z){
+        RBTnode y=z;
+        RBTnode chosen;
+        Boolean yOriginColor=z.color;
+        if (z.left==Nul){
+            chosen=z.right;
+            transplant(z,z.right);
+        }else if (z.right==Nul){
+            chosen=z.left;
+            transplant(z,z.left);
+        }else {
+            y=min(z.right);
+            yOriginColor=y.color;
+            chosen=y.right;
+            if (y.parent==z)
+                chosen.parent=y;
+            else {
+                transplant(y,y.right);
+                y.right=z.right;
+                y.right.parent=y;
+            }
+            transplant(z,y);
+            y.left=z.left;
+            y.left.parent=y;
+            y.color=z.color;
+        }
+        if(yOriginColor==BLACK)
+//            deleteFixUp()
+            ;
+    }
+
     private void print(RBTnode<T> tree, T key, int direction) {
 
         if (tree != null) {
