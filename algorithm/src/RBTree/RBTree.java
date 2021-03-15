@@ -180,10 +180,10 @@ public class RBTree<T extends Comparable<T>> {
             y.color=z.color;
         }
         if(yOriginColor==BLACK)
-//            deleteFixUp()
+            deleteFixUp(chosen);
             ;
     }
-    private void deleteFixup(RBTnode x){
+    private void deleteFixUp(RBTnode x){
         RBTnode w;// brother of x
         while (x!=root && x.color==BLACK) {
             if (x.parent.left==x){
