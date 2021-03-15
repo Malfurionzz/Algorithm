@@ -228,6 +228,7 @@ public class RBTree<T extends Comparable<T>> {
                 rightRotation(w.parent);
             }
         }
+        x.color=BLACK;
     }
     private void print(RBTnode<T> tree, T key, int direction) {
 
