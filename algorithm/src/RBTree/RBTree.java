@@ -155,8 +155,8 @@ public class RBTree<T extends Comparable<T>> {
     }
     public void delete(RBTnode<T> z){
         RBTnode y=z;
-        RBTnode chosen;
         Boolean yOriginColor=z.color;
+        RBTnode chosen;
         if (z.left==Nul){
             chosen=z.right;
             transplant(z,z.right);
@@ -183,7 +183,52 @@ public class RBTree<T extends Comparable<T>> {
 //            deleteFixUp()
             ;
     }
-
+    private void deleteFixup(RBTnode x){
+        RBTnode w;// brother of x
+        while (x!=root && x.color==BLACK) {
+            if (x.parent.left==x){
+                w=x.parent.right;
+                if (w.color==RED){
+                    w.color=x.parent.color;
+                    x.parent.color=RED;
+                    leftRotation(x.parent);
+                    w=x.parent.right;
+                }
+                if (w.left.color==BLACK && w.right.color==BLACK){
+                    w.color=RED;
+                    x=x.parent;
+                }else if (w.right.color==BLACK){
+                    w.color=RED;
+                    w.left.color=BLACK;
+                    rightRotation(w);
+                    w=x.parent.right;
+                }
+                w.color=RED;
+                w.parent.color=BLACK;
+                leftRotation(w.parent);
+            }else {
+                w=x.parent.left;
+                if (w.color==RED){
+                    w.color=x.parent.color;
+                    x.parent.color=RED;
+                    rightRotation(x.parent);
+                    w=x.parent.left;
+                }
+                if (w.right.color==BLACK && w.left.color==BLACK){
+                    w.color=RED;
+                    x=x.parent;
+                }else if (w.left.color==BLACK){
+                    w.color=RED;
+                    w.right.color=BLACK;
+                    leftRotation(w);
+                    w=x.parent.left;
+                }
+                w.color=RED;
+                w.parent.color=BLACK;
+                rightRotation(w.parent);
+            }
+        }
+    }
     private void print(RBTnode<T> tree, T key, int direction) {
 
         if (tree != null) {
