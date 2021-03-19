@@ -26,4 +26,39 @@ public class OSTree <T extends Comparable<T>>{
             this.size= size;
         }
     }
+
+    /**
+     * to find the i-th smallest node in OSTree or subtree
+     * @param x the root node
+     * @param i
+     * @return the node
+     */
+    public OSTnode select(OSTnode x,Integer i){
+        Integer r= x.left.size+1;
+        if (i==r)
+            return x;
+        else if (i<r)
+            return select(x.left,i);
+        else
+            return select(x.right,i-r);
+    }
+
+    /**
+     * get the rank of a node: the order when inOrder traverse
+     *用归纳法，初始时求以x为根的子树中x的rank，每次循环上升一次，用归纳法证明最终求得 rank in OSTree。
+     * @param x
+     * @return A Integer, rank in OSTree
+     */
+    public Integer rank(OSTnode x){
+        Integer r=x.left.size+1;
+        OSTnode y=x;
+        while (y!=root){
+            if (y==y.parent.right){
+                r=r+y.parent.left.size+1;
+            }
+            y=y.parent;
+        }
+        return r;
+    }
+
 }
