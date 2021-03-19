@@ -1,3 +1,7 @@
-# Algorithm
-note of algs
-beta test here1
+Algorithm of zsy 
+* quick sort
+* linear-Time Sort
+* Heap Sort
+* Binary Search Tree
+* Red-Black Tree
+* Order-statistic Tree
