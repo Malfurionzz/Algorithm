@@ -4,10 +4,8 @@ package DynamicPromgraming;
  * 思路：以矩阵链的长度为出发点求解子问题。
  */
 
-import java.util.Scanner;
-
 public class matrixChainMultipication {
-    public static void matrixChianOrder(int[] p) {
+    public static void matrixChainOrder(int[] p) {
         int n = p.length - 1;
         int[][] m = new int[n + 1][n + 1];
         int[][] s = new int[n + 1][n + 1];
@@ -46,6 +44,6 @@ public class matrixChainMultipication {
 
     public static void main(String[] args) {
         int[] p = new int[]{30, 35, 15, 5, 10, 20, 25};
-        matrixChianOrder(p);
+        matrixChainOrder(p);
     }
 }
